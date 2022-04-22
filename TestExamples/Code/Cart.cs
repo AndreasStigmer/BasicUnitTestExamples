@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace TestExamples.Code
 {
-    public class Cart
+    public class Cart : ICart
     {
         private List<CartItem> _list;
-        
+
         public Cart()
         {
             _list = new List<CartItem>();
@@ -21,8 +21,8 @@ namespace TestExamples.Code
         /// <returns></returns>
         public List<CartItem> GetAllItems()
         {
-            var list=new List<CartItem>();
-            foreach(var item in _list)
+            var list = new List<CartItem>();
+            foreach (var item in _list)
             {
                 list.Add(new CartItem { Item = new Product { Id = item.Item.Id, Name = item.Item.Name }, Qty = item.Qty });
             }
@@ -36,9 +36,10 @@ namespace TestExamples.Code
         public void AddProduct(Product product)
         {
             var item = FindItemById(product.Id);
-            if(item == null)
+            if (item == null)
             {
-                _list.Add(new CartItem { Item=product,Qty=1});
+                _list.Add(new CartItem { Item = product, Qty = 1 });
+                return;
             }
             item.Qty++;
         }
@@ -48,8 +49,9 @@ namespace TestExamples.Code
         /// </summary>
         /// <param name="Id">The productid</param>
         /// <returns>CartItem with the specified productid or null if not found</returns>
-        public CartItem FindItemById(Guid Id) { 
-            return _list.FirstOrDefault(x=>x.Item.Id == Id);
+        public CartItem FindItemById(Guid Id)
+        {
+            return _list.FirstOrDefault(x => x.Item.Id == Id);
         }
 
         /// <summary>
@@ -59,7 +61,7 @@ namespace TestExamples.Code
         public void RemoveProduct(Guid productId)
         {
             var item = FindItemById(productId);
-            if( item == null)
+            if (item == null)
             {
                 _list.Remove(item);
             }
